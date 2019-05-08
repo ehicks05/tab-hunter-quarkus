@@ -1,12 +1,12 @@
 package net.ehicks.tabhunter;
 
-import io.quarkus.panache.common.Page;
-import io.quarkus.panache.common.Sort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.transaction.Transactional;
-import javax.ws.rs.*;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -14,61 +14,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Path("/")
-public class MyResource {
-    private static final Logger log = LoggerFactory.getLogger(MyResource.class);
+@Path("/api/search")
+public class SearchController {
+    private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
-    @Path("/hello")
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Tab tab() {
-        Tab tab = new Tab();
-        tab.persist();
-        return tab;
-    }
-
     @Path("/")
-    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Tab> showIndex()
-    {
-        return Tab.list("", Sort.by("views"));
-    }
-
-    @GET
-    @Path("/all")
-    public List<Tab> showAll()
-    {
-        return Tab.find("", Sort.by("views"))
-                .page(Page.ofSize(50))
-                .list();
-    }
-
-    @GET
-    @Path("/tab/{hash}")
-    public Tab showTab(@PathParam("hash") int tabHash)
-    {
-        Tab tab = Tab.findByHash(tabHash);
-        if (tab == null)
-            log.error("couldn't find tab.");
-        else
-        {
-            tab.views += 1;
-            tab.persist();
-        }
-        return tab;
-    }
-
-    @GET
-    @Path("/tab/{artist}")
-    public List<Tab> showArtistTabs(@PathParam("artist") String artist)
-    {
-        return Tab.list("artist", artist);
-    }
-
-    @GET
-    @Path("/search")
     public Object getSearchResults(@FormParam("query") String query, @FormParam("artist") String artist, @FormParam("name") String name)
     {
         if (artist == null) artist = "";

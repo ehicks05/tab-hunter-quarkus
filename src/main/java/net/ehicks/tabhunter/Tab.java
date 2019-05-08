@@ -2,6 +2,7 @@ package net.ehicks.tabhunter;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.util.Date;
 
@@ -11,6 +12,7 @@ public class Tab extends PanacheEntity
     public int hash = 0;
     public String artist = "";
     public String name = "";
+    @Column(columnDefinition = "text")
     public String content = "";
     public int numberRates = 0;
     public double rating = 0F;
