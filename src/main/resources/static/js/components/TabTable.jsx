@@ -79,7 +79,7 @@ export default class TabTable extends React.Component {
                             <table className="table is-narrow">
                                 <thead>
                                 <tr>
-                                    <th>yo </th>
+                                    <th> </th>
                                     <th> </th>
                                     <th className="has-text-right">rating</th>
                                     <th>type</th>

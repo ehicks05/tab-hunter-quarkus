@@ -11,6 +11,8 @@ export default class Header extends React.Component {
         super(props);
         this.importClassTabs = this.importClassTabs.bind(this);
         this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
+        this.search = this.search.bind(this);
+        this.goToTab = this.goToTab.bind(this);
     }
 
     componentDidMount() {
@@ -52,6 +54,24 @@ export default class Header extends React.Component {
         this.props.store.uiState.importClassTabs();
     }
 
+    search(query, callback) {
+        fetch("/api/search/ajaxSearch?query=" + query)
+            .then(response => response.json())
+            .then(myJson => callback(myJson));
+    }
+
+    goToTab()
+    {
+        const term = document.getElementById('searchInput').value;
+        const query = encodeURIComponent(term);
+            // +
+            // "&artist=" + encodeURIComponent(artist) +
+            // "&name=" + encodeURIComponent(name);
+        const url = "/api/search?query=" + query;
+        console.log(url);
+        location.href = url;
+    }
+
     render()
     {
         return (
@@ -71,6 +91,18 @@ export default class Header extends React.Component {
                 <div className="navbar-menu" id="navMenu">
                     <div className="navbar-start">
                         <NavLink to='/all' activeClassName='is-active' className="navbar-item">All</NavLink>
+                        <div className="navbar-item is-expanded">
+                            <div className="field has-addons" style={{flexGrow: 1, flexShrink: 1}}>
+                                <p className="control" style={{flexGrow: 1, flexShrink: 1}}>
+                                    <input id="searchInput" className="input is-expanded is-fullwidth" type="text" placeholder="Find a tab" />
+                                </p>
+                                <p className="control">
+                                    <button id="searchButton" className="button is-primary" onClick={this.goToTab}>
+                                        Search
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                     <div className="navbar-end">
                         <a onClick={this.importClassTabs} href={null} className={"navbar-item"}>
